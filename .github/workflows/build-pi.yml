@@ -1,0 +1,37 @@
+name: Attempt to build wxPython for arm64 via GitHub Actions
+on:
+  push:
+    branches: [ main ]
+    # tags: ['v*']
+jobs:
+  build-it-please:
+    runs-on: arm64
+    steps:
+      - uses: actions/checkout@v2
+    - name: Grab tar source code - creates wxPython-4.1.0 subdir
+      if: false
+      run |
+        curl https://files.pythonhosted.org/packages/cb/4f/1e21d3c079c973ba862a18f3be73c2bbe2e6bc25c96d94df605b5cbb494d/wxPython-4.1.0.tar.gz > junk.tar.gz 
+        tar xf junk.tar.gz 
+    - name: Setup Python please
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.7
+    - name: Install system dependencies
+      run: |
+        ls -l
+        sudo apt-get install dpkg-dev build-essential libjpeg-dev libtiff-dev libsdl1.2-dev libgstreamer-plugins-base0.10-dev libnotify-dev freeglut3 freeglut3-dev libwebkitgtk-dev libghc-gtk3-dev libwxgtk3.0-gtk3-dev
+        sudo apt-get install python3.7-dev
+    - name: Install Python dependencies
+      run: |
+        cd wxPython-4.1.0
+        pip3 install -r requirements.txt
+    - name: Do the build
+      run: |
+        python3 build.py build bdist_wheel --jobs=1
+        ls -l dist/
+    - name: Save wheel as an artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: wxPython-4.1.0-cp37-arm64-andy-wheel  # to
+        path: dist/*.whl  # from e.g. wxPython-4.1.0-cp37-cp37m-linux_armv7l.whl
