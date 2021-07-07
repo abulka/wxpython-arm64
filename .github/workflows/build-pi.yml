@@ -1,11 +1,11 @@
 name: Attempt to build wxPython for arm64 via GitHub Actions
 on:
   push:
-    branches: [ main ]
-    # tags: ['v*']
+    # branches: [ main ]
+    tags: ['v*']
 jobs:
   build-it-please:
-    runs-on: arm64
+    runs-on: arm64  # not supported (unless self host) - we have to wait for arm64 in Azure. - https://github.com/actions/virtual-environments/issues/2552
     steps:
     - uses: actions/checkout@v2
     - name: Grab tar source code - creates wxPython-4.1.0 subdir
