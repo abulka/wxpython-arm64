@@ -7,7 +7,7 @@ jobs:
   build-it-please:
     runs-on: arm64
     steps:
-      - uses: actions/checkout@v2
+    - uses: actions/checkout@v2
     - name: Grab tar source code - creates wxPython-4.1.0 subdir
       if: false
       run |
